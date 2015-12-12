@@ -1,1 +1,6 @@
 C:\Users\David\Documents\GitHub\CalculatorScripting\Initial Calculator\CalculatorLibrary\CalculatorLibrary\bin\Debug\CalculatorLibrary.exe.config
+C:\Users\David\Documents\GitHub\CalculatorScripting\Initial Calculator\CalculatorLibrary\CalculatorLibrary\bin\Debug\CalculatorLibrary.exe
+C:\Users\David\Documents\GitHub\CalculatorScripting\Initial Calculator\CalculatorLibrary\CalculatorLibrary\bin\Debug\CalculatorLibrary.pdb
+C:\Users\David\Documents\GitHub\CalculatorScripting\Initial Calculator\CalculatorLibrary\CalculatorLibrary\obj\Debug\CalculatorLibrary.csprojResolveAssemblyReference.cache
+C:\Users\David\Documents\GitHub\CalculatorScripting\Initial Calculator\CalculatorLibrary\CalculatorLibrary\obj\Debug\CalculatorLibrary.exe
+C:\Users\David\Documents\GitHub\CalculatorScripting\Initial Calculator\CalculatorLibrary\CalculatorLibrary\obj\Debug\CalculatorLibrary.pdb
