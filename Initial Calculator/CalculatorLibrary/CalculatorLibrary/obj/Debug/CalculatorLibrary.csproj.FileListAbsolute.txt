@@ -1,0 +1,1 @@
+C:\Users\David\Documents\GitHub\CalculatorScripting\Initial Calculator\CalculatorLibrary\CalculatorLibrary\bin\Debug\CalculatorLibrary.exe.config
