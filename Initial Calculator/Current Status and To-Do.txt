@@ -1,0 +1,9 @@
+Note: This file should be updated during every commit. It should explain what is accomplished, and what is left to do.
+
+Error-Checking: Always in-progress, but should have a significant number of errors caught at this point.
+
+Expression Parsing: Mostly done. Needs slight edits to stop it from being an infinite loop once called recursively. Right now, whatever's left over is turned into an Expression and added to the list, which then if it were called would add itself to an Expression within that and... you get the point. To fix it: If at the end of parsing there is only one Expression object in the list, take its expr value and set the current expr equal to that, then delete the Expression object. Each object should have either a list of Expressions to evaluate or its own expr, but never both, and a list of Expressions should always have multiple Expressions in it, never only one.
+
+Further to-do on parsing: Add infered multiplication when multiplying a variable by a constant, E.G. 3x -> 3*x.
+
+Evaluation: Not even started.
