@@ -9,8 +9,10 @@ namespace CalculatorLibrary {
     static public Calculator cl;
     static void Main(string[] args) {
       cl=new Calculator();
-      Console.Out.Write("Please input an equation to evaluate: ");
-      Console.Out.WriteLine(cl.evaluate(Console.ReadLine()));
+      while(true) {//Infinitely accept expressions, for now
+        Console.Out.Write("Please input an expression to evaluate: ");
+        Console.Out.WriteLine(cl.evaluate(Console.ReadLine()));
+      }
     }
   }
 }

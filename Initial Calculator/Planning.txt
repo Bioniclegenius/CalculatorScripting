@@ -1,0 +1,31 @@
+Tuesday, December 22, 2015
+
+12:33 PM
+Been quite a while since I've opened up this project. I've been doing some thinking about this, which puts me/us back at about the starting point again. So, here's how the general flow should work:
+
+1. User inputs expression (the proper term, and what it should be referred to from here on out. To avoid some confusion, the object "Expression" will be capitalized, whereas an actual expression will not be, save for grammatical necessity.)
+
+2. Expression is passed to the "calculator" library.
+
+3. Check occurs to see if it's an expression or if it's in a program or a line of code or something. Skipping this for now, since it's just a pure calculator at the moment. The rest of this current route describes if it is found to be an expression.
+
+4. Expression is passed to the Expression library, and the "evaluate" function should be called on the Expression object.
+
+5. This is a big step. This is where the parsing of the expression occurs within the Expression library. The Expression will scan through the expression and separate it into smaller Expressions to be evaluated separately and recursively. The Expression will scan left to right in the equation. If it encounters a parenthese, it will automatically jump forward, counting open and close parentheses, until it finds its mate, mark that section, and pass it to another Expression in an internally-held List<Expression>. Any chunks found between operators are to also be extracted and put to a smaller expression.
+
+Brief explanation and example of step 5:
+
+With this, an expression that says, for instance, "5*(3x+1)+5" would be broken down into 5, 3x+1 (the edge parentheses are to be stripped, to avoid infinite recursion), and another 5, as Expressions within a list inside the Expression. In the first subExpression, its evaluate would run through all steps from 4 onwards, and return "4" at the end. The second would scan the "3x+1" and break it down into "3x" and "1" Expressions. The first of those would infer the "*" and return "3*x" to the parent, which then is left with "3x" and "1" Expressions again, the second having evaluated to the same as the input, since it cannot be broken down further. At the end of the evaluate, it cannot be simplified further, so this would be passed back up to the parent. The third Expression, 5, would likewise finish and return 5. Then the parent Expression would walk through the next steps, finding no exponentiation, and passing the second expression to the first through a "multiply" function. The first expression would then combine with the second and return "15x+5", and the second expression and operation would be deleted from the parent's Expression. No more multiplication or division is found, and thus the addition/subtraction step begins. The third Expression, now number two, is passed to the first through an "addition" function, which can be represented as "15x+5" + "5". After evaluation of this, the first Expression returns "15x+10", which cannot be broken down further, and now that the parent Expression has only one child, that is its final answer.
+
+6. Parent Expression calls "evaluate" sequentially on all its children, which run recursively through this from steps 5 onward.
+
+7. Parent Expression now concatonates all its children together with the proper operators from the original expression.
+8. Parent Expression scans through for exponentiation, the ^ symbol, and performs it as found on the left-hand side to the right-hand side's power. Continue scanning from left to right until the end of the expression is reached.
+
+9. Parent Expression walks through the expression, performing multiplication (*) and division (/) as found sequentially until it reaches the end again.
+
+10. Parent Expression finishes up with subtraction and addition scans.
+
+Mind you, this includes no variables in this flow yet. It's a step-by-step operation for chunks. The example has variables to simply explain how a final step would happen. As always, this flow is subject to change, as necessary. First attempts at the calculator will simply deal with numbers.
+
+-Bioniclegenius
