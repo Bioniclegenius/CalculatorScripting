@@ -23,10 +23,16 @@ namespace CalculatorLibrary {
 
     string expression;
     bool isParent;
+    List<Expression> exprs;
+    List<char> ops;
+    List<Expression> tempexprs;
+    List<char> tempops;
 
     public Expression(string exprin="",bool parent=false) {//constructor
       expression=exprin;
       isParent=parent;
+      tempexprs=new List<Expression>();
+      tempops=new List<char>();
     }
 
     public bool isOperator(char check){//checks to see if a character in a string is an operator
@@ -48,25 +54,10 @@ namespace CalculatorLibrary {
     }
 
     public bool isNumeric(string check) {
-      int decCount=0;
-      for(int x=0;x<check.Length;x++) {
-        if(!isNumeric(check[x])&&check[x]!='.') {
-          return false;
-        }
-        else if(check[x]=='.') {
-          decCount++;
-          if(decCount>1)
-            return false;
-        }
-      }
-      return true;
-    }
-
-    public bool isFloat(string check) {
       for(int x=0;x<check.Length;x++)
-        if(check[x]=='.')
-          return true;
-      return false;
+        if(!isNumeric(check[x])&&check[x]!='.'&&check[x]!='-')
+          return false;
+      return true;
     }
 
     public bool isVariable(string check) {
@@ -74,6 +65,17 @@ namespace CalculatorLibrary {
         if(!isLetter(check[x]))
           return false;
       return true;
+    }
+
+    public bool collapse() {
+      if(exprs.Count()==1) {
+        if(!isNumeric(exprs[0].expression)&&!isVariable(exprs[0].expression))
+          exprs[0].evaluate();
+        expression=exprs[0].expression;
+        exprs.Clear();
+        return true;
+      }
+      return false;
     }
 
     public void exponentiate(string expr) {
@@ -87,12 +89,54 @@ namespace CalculatorLibrary {
         expression=expression+"^"+expr;
     }
 
+    public void multiply(Expression expr) {
+      tempexprs=new List<Expression>();
+      tempops=new List<char>();
+      if(expr.exprs.Count()==0) {
+        if(isNumeric(expression)&&isNumeric(expr.expression)) {
+          double num1=Convert.ToDouble(expression);
+          double num2=Convert.ToDouble(expr.expression);
+          num1*=num2;
+          expression=Convert.ToString(num1);
+        }
+        else
+          expression=expression+"*"+expr.expression;
+      }
+      else {
+        List<Expression> exprBufs=expr.exprs;
+        if(exprs.Count()==0&&isNumeric(expression)) {
+          for(int x=0;x<exprBufs.Count;x++)
+            if(isNumeric(exprBufs[x].expression)) {
+              double num1=Convert.ToDouble(expression);
+              double num2=Convert.ToDouble(exprBufs[x].expression);
+              num1*=num2;
+              exprBufs[x].expression=Convert.ToString(num1);
+            }
+          for(int x=0;x<exprBufs.Count();x++)
+            tempexprs.Add(exprBufs[x]);
+          for(int x=0;x<expr.ops.Count();x++)
+            tempops.Add(expr.ops[x]);
+        }
+      }
+    }
+
+    public void divide(Expression expr) {
+      if(isNumeric(expression)&&isNumeric(expr.expression)) {
+        double num1=Convert.ToDouble(expression);
+        double num2=Convert.ToDouble(expr.expression);
+        num1=num1/num2;
+        expression=Convert.ToString(num1);
+      }
+      else
+        expression=expression+"/"+expr;
+    }
+
     public string evaluate() {//the big mess. Warning.
 
       #region Declarations
       //================================================================================================================================
-      List<Expression> exprs=new List<Expression>();
-      List<char> ops=new List<char>();
+      exprs=new List<Expression>();
+      ops=new List<char>();
       string validChars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.()^*/+-!=";
       int numParen=0;
       string expr=expression;
@@ -249,13 +293,8 @@ namespace CalculatorLibrary {
       if(expr.Length>0)
         exprs.Add(new Expression(expr));
       expr="";
-      if(exprs.Count()==1) {
-        if(!isNumeric(exprs[0].expression)&&!isVariable(exprs[0].expression))
-          exprs[0].evaluate();
-        expression=exprs[0].expression;
+      if(collapse())
         expr=expression;
-        exprs.Clear();
-      }
       //================================================================================================================================
       #endregion
 
@@ -292,20 +331,57 @@ namespace CalculatorLibrary {
       //--------------------------------------------------------------------------------------------------------------------------------
       for(int x=0;x<ops.Count();x++)//Exponentiation is weird, come back later.
         if(ops[x]=='^') {
-          exprs[x].exponentiate(exprs[x+1].expression);
-          exprs.RemoveAt(x+1);
-          ops.RemoveAt(x);
+          int cur=x;
+          for(int y=x+1;y<ops.Count();y++) {
+            if(ops[y]=='^')
+              x=y;
+            else
+              break;
+          }
+          for(int y=x;y>=cur;y--) {
+            exprs[y].exponentiate(exprs[y+1].expression);
+            exprs.RemoveAt(y+1);
+            ops.RemoveAt(y);
+            x--;
+          }
         }
+      //if(collapse())
+      //  expr=expression;
       //--------------------------------------------------------------------------------------------------------------------------------
       #endregion
 
         #region Multiplication and Division
       //--------------------------------------------------------------------------------------------------------------------------------
+      for(int x=0;x<ops.Count();x++) {
+        if(ops[x]=='*') {
+          exprs[x].multiply(exprs[x+1]);
+          exprs.RemoveAt(x+1);
+          if(exprs[x].tempexprs.Count()!=0) {
+            ops.InsertRange(x+1,exprs[x].tempops);
+            exprs.InsertRange(x+1,exprs[x].tempexprs);
+            exprs.RemoveAt(x);
+            ops.RemoveAt(x);
+          }
+        }
+        else if(ops[x]=='/') {
+          exprs[x].divide(exprs[x+1]);
+          exprs.RemoveAt(x+1);
+          ops.RemoveAt(x);
+          x--;
+        }
+      }
+      //if(collapse())
+      //  expr=expression;
+      //--------------------------------------------------------------------------------------------------------------------------------
+        #endregion
+
+        #region Addition and Subtraction
+      //--------------------------------------------------------------------------------------------------------------------------------
 
       //--------------------------------------------------------------------------------------------------------------------------------
       #endregion
 
-        #region Addition and Subtraction
+        #region Equals
       //--------------------------------------------------------------------------------------------------------------------------------
 
       //--------------------------------------------------------------------------------------------------------------------------------

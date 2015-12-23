@@ -11,7 +11,10 @@ namespace CalculatorLibrary {
       cl=new Calculator();
       while(true) {//Infinitely accept expressions, for now
         Console.Out.Write("Please input an expression to evaluate: ");
-        Console.Out.WriteLine(cl.evaluate(Console.ReadLine()));
+        string expr=Console.ReadLine();
+        Console.ForegroundColor=ConsoleColor.Yellow;
+        Console.Out.WriteLine(cl.evaluate(expr));
+        Console.ForegroundColor=ConsoleColor.Gray;
       }
     }
   }

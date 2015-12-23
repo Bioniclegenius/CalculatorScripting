@@ -2,6 +2,6 @@ Note: This file should be updated during every commit. It should explain what is
 
 Error-Checking: Always in-progress, but should have a significant number of errors caught at this point.
 
-Expression Parsing: Mostly done. Inferred multiplication with parentheses and variables is successful. Needs more exhaustive testing and checking.
+Expression Parsing: Mostly done. Inferred multiplication with parentheses and variables is successful. Needs more exhaustive testing and checking. ...Weird stuff is cropping up now, especially when variables and parentheses get tossed in. It's more an issue of multiplication running.
 
-Evaluation: The beginnings of exponentiation are working. So far, only will do it if two numerically evaluated numbers are on either side of the operation.
+Evaluation: The beginnings of exponentiation are working. So far, only will do it if two numerically evaluated numbers are on either side of the operation. But then, that's all it needs to do. Multiplication is started on, but it's... weird, and messing with everything. Halp.
