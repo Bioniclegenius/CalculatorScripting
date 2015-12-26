@@ -352,7 +352,7 @@ namespace CalculatorLibrary {
 
         #region Multiplication and Division
       //--------------------------------------------------------------------------------------------------------------------------------
-      for(int x=0;x<ops.Count();x++) {
+      /*for(int x=0;x<ops.Count();x++) {
         if(ops[x]=='*') {
           exprs[x].multiply(exprs[x+1]);
           exprs.RemoveAt(x+1);
@@ -369,7 +369,7 @@ namespace CalculatorLibrary {
           ops.RemoveAt(x);
           x--;
         }
-      }
+      }*/
       //if(collapse())
       //  expr=expression;
       //--------------------------------------------------------------------------------------------------------------------------------
